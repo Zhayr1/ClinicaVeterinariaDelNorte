@@ -1,0 +1,184 @@
+body {
+	background: #f8f8f8;
+	background-image: url('../images/patasedit2.png');
+}
+.main_div {
+	background-color: #f8f8f8;
+	margin: auto;
+	margin-top: 5%;
+	width: 960px;
+	min-width: 960px;
+	min-height: 700px;
+	border: 1px solid orange;
+}
+.header_div {
+	width: auto;
+	height: 80px;
+}
+.nav_div {
+	width: auto;
+	height: 50px;
+}
+.content_div {
+	width: auto;
+	min-height: 550px;
+}
+.form_div {
+	height: 550px;
+}
+.top-div {
+	background-color: orange;
+	width: auto;
+	height: 15px;
+}
+.bottom-div {
+	background-color: orange;
+	width: auto;
+	height: 15px;
+}
+.logo_div {
+	width: 200px;
+	height: 100px;
+	display: inline-block;
+}
+.login_form_div {
+	border: 1px solid orange;
+	border-radius: 7px;
+	display: inline-block;
+	float: right;
+	padding: 5px;
+	margin-top: 7px;
+	margin-right: 7px;
+}
+.nav_ul {
+	padding: 5px;
+}
+.footer_div {
+	border-radius: 20px;
+	margin-top: 5px;
+	width: auto;
+}
+.feature_div {
+	width: 640px;
+	height: 450px;
+	float: left;
+	display: inline-block;
+}
+.browser_div {
+	width: auto;
+	height: 450px;
+	float: right;
+	margin-top: -550px;
+	margin-right: 20px;
+}
+.userfield {
+	display: inline-block;
+}
+.searchField {
+	display: inline-block;
+	width: 230px;
+}
+.search_field {
+	width: 150px;
+}
+.submit_search {
+	margin-left: 4px;
+}
+.regisfield {
+	margin-top: -10px;
+	padding-left: 20px;
+	display: inline-block;
+	float: left;
+}
+.title {
+	float: left;
+	text-align: right;
+	width: 150px;
+}
+.username, .password, .submit {
+	margin-left: 4px;
+}
+.registitle {
+	font-size: 21px;
+}
+.swipe {
+	max-width: 700px;
+	max-height: 600px;
+	display: block;
+	padding: 20px;
+	overflow: hidden;
+	visibility: hidden;
+	position: relative;
+}
+.swipe-wrap {
+	overflow: hidden;
+	position: relative;
+}
+.swipe-wrap > div {
+	float: left;
+	width: 100%;
+	position: relative;
+}
+.swipe_img {
+	border-radius: 10px;
+	border: 2px solid orange;
+}
+input {
+	font-size: 100%;
+	color: #5a5854;
+	background-color: #f2f2f2;
+	border: 1px solid #bdbdbd;
+	border-radius: 5px;
+}
+input:focus {
+	background-color: #ffffff;
+	border: 1px solid #b1e1e4;
+}
+.nav_li {
+	display: inline;
+}
+.dogs_ul, .article_ul {
+	list-style: none;
+}
+.browser_div_list {
+	margin-top: 10px;
+}
+p, .title, a {
+	font-family: 'Curier', monospace;
+	color: black;
+	font-size: 20px;
+}
+a.nav_link {
+	font-size: 30px;
+	margin-left: 10px;
+}
+a:link {
+	color: black;
+	text-decoration: none;
+}
+a:hover {
+	color: orange;
+}
+p {
+	margin: 10px;
+}
+a.registitle:hover {
+	color: orange;
+}
+a.browser_link {
+	font-size: 15px;
+	margin-left: 1px;
+}
+fieldset {
+	border: 1px solid orange;
+	margin-top: 5px;
+}
+legend {
+	border: 1px solid orange;
+	background-color: orange;
+	border-radius: 5px;
+	font-size: 20px;
+}
+.usertitle {
+	font-size: 15px;
+}

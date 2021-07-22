@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - static_volume:/usr/src/app/app/static/tmp
+      - .:/usr/src/app/
     depends_on:
       - web
     restart: "on-failure"
@@ -22,7 +22,6 @@ services:
     command: bash -c "cd app && python manage.py migrate && python -m daphne -p 8000 -b 0.0.0.0 backend.asgi:application"
     volumes:
       - .:/usr/src/app/
-      - static_volume:/usr/src/app/app/static/tmp
     ports:
       - 8000:8000
     env_file:
@@ -33,4 +32,3 @@ services:
 
 volumes:
   postgres_data:
-  static_volume:
