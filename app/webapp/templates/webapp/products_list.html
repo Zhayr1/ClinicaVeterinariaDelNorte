@@ -1,0 +1,169 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+{% block title %}{{title}}Productos{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'webapp/css/dog_list_styles.css' %}">
+{% endblock %}
+{% block nav_items %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:index' %}">Inicio<span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'webapp:products' %}">Productos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:pets' %}">Mascotas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:contact' %}">Contacto</a>
+  </li>
+{% endblock %}
+{% block content %}
+    <div class="content bg-muted border-bottom">
+      <div class="row mt-1 mb-1">
+        <div class="col-auto">
+          Categorias: <a href="#">Comestibles</a> - <a href="#">Atuendos</a> - <a href="#">Accesorios</a>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      {% if not user.is_authenticated %}
+      <div class="col-12">
+        <div class="alert alert-dark alert-dismissible" role="alert">
+          <p>Para reservar productos primero debe <a href="{% url 'webapp:login' %}">iniciar sesion</a></p>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      {% endif %}
+      {% for product_post in object_list %}
+        {% if product_post.type == 'P' %}
+          <div class="col-12 col-md-6">
+            <div class="card mb-3">
+              <div class="row no-gutters">
+                <div class="col-md-4 col-sm-4">
+                  <img src="{% static product_post.product.img_url %}" class="card-img" alt="..." height='200px' width='320px'>
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <p class="card-title"><b>{{ product_post.product.name|truncatechars:'30' }}</b><br>
+                      {% if product_post.product.stock < 1 %}
+                        <span class="badge badge-danger">Disponibles
+                        <span class="badge badge-light">0</span></span>
+                      {% elif product_post.product.stock < 6 %}
+                      {% if product_post.product.stock > 1 %}
+                        <span class="badge badge-warning">Disponibles
+                        <span class="badge badge-light">{{ product_post.product.stock|truncatechars:'6' }}</span></span>
+                      {% endif %}  
+                      {% else %}
+                      <span class="badge badge-primary">Disponibles
+                      <span class="badge badge-light">{{ product_post.product.stock|truncatechars:'6' }}</span></span>
+                      {% endif %}
+                    </p>
+                    <h6 class="card-subtitle mb-2 text-success">{{ product_post.product.price }}$</h6>
+                    {% if product_post.product.description|length > 70 %}
+                    <p class="card-text">{{ product_post.product.description|truncatechars:'100' }}
+                    {% else %}
+                    <p class="card-text">{{ product_post.product.description|truncatechars:'70' }}</p>
+                    {% endif %}
+                    <hr>
+                    <a class="btn btn-primary w-100" href="{% url 'webapp:product_details' product_post.id %}" type="button">Ver mas</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+      {% empty %}
+          <div class="col-12">
+            <p> Actualmente no se encuentran productos disponibles en el sistema</p>
+          </div>
+      {% endfor %}
+      <div class="col-12 mt-3">
+        <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+          {% for i in total_objects %}
+          {% if forloop.counter < 6 %}
+          {% if total_objects|length > 5 %}
+          {% if index > 3 and index < total_objects|length|add:'-5' %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter|add:index|add:'-3' %}
+            <a href="{% url 'webapp:products' forloop.counter|add:index|add:'-3' %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter|add:index|add:'-3'}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:products' forloop.counter|add:index|add:'-3' %}" class="btn btn-link border-bottom">
+              {{forloop.counter|add:index|add:'-3'}}
+            </a>
+            {% endif %}
+          </div>
+          {% elif index > total_objects|length|add:'-6' and index <= total_objects|length %}
+          {% if forloop.first %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <a href="{% url 'webapp:products' total_objects|length|add:'-7'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-7'|add:forloop.counter}}
+            </a>
+            </div>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == total_objects|length|add:'-6'|add:forloop.counter %}
+            <a href="{% url 'webapp:products' total_objects|length|add:'-6'|add:forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{total_objects|length|add:'-6'|add:forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:products' total_objects|length|add:'-6'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-6'|add:forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == total_objects|length|add:'-5'|add:forloop.counter %}
+            <a href="{% url 'webapp:products' total_objects|length|add:'-5'|add:forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{total_objects|length|add:'-5'|add:forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:products' total_objects|length|add:'-5'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-5'|add:forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter %}
+            <a href="{% url 'webapp:products' forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:products' forloop.counter %}" class="btn btn-link border-bottom">
+              {{forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endif %}
+          {% if index < 4 and total_objects|length < 6 %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter %}
+            <a href="{% url 'webapp:products' forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:products' forloop.counter %}" class="btn btn-link border-bottom">
+              {{forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+{% endblock %}

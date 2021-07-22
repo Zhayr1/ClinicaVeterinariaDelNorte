@@ -1,0 +1,109 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}Mi Cuenta{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block nav_items %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:index' %}">Inicio</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:products' %}">Productos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:pets' %}">Mascotas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:contact' %}">Contacto</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="row alert-dark m-0">
+  <div class="col-12 col-md-6">
+    <h5 class='pt-2 text-dark'>Lista de reservaciones</h5>
+    <p type="button" class="btn pl-0 mb-0">
+      Reservas de perros disponibles <span class="badge badge-light">{{ reservas_disponibles }}<i class='fa fa-dog ml-1'></i></span>
+    </p>
+  </div>
+  <div class="col-12 col-md-6 mt-1 justify-content-md-end align-items-start d-flex">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <a class="btn btn-secondary btn-sm rounded-left" role="button" href="{% url 'webapp:profile_config' pk=user.id %}">Actualizar Datos<i class='fa fa-user-edit ml-1'></i></a>
+      <a class="btn btn-secondary btn-sm rounded-right" role="button" href="{% url 'webapp:change_pw' %}">Cambiar Contraseña<i class='fa fa-user-cog ml-1'></i></a>
+    </div>
+  </div>
+</div>
+<div class='row m-0 table-responsive'>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th class='d-none d-md-block' scope="col">Cantidad</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for res in object_list %}
+      <tr>
+        <th scope="row">{{forloop.counter}}</th>
+        {% if res.type == 'D'%}
+        <td>{{ res.post.dog.name }}</td>
+        <td class=''>{{ res.post.dog.price|intcomma }}<i class='fa fa-dollar-sign ml-1'></i></td>
+        <td class='d-none d-md-block'>- - - -</td>
+        <td><button class='btn btn-danger float-right btn-sm' role='button' data-toggle="modal" data-target="#res{{ res.id }}">Eliminar</button></td>
+        {% elif res.type == 'P'%}
+        <td>{{ res.post.product.name }}</td>
+        {% with x=forloop.counter0 %}
+        {% for p in product_prices %}
+        {% if x == forloop.counter0 %}<td class=''>{{ p|intcomma }}<i class='fa fa-dollar-sign ml-1'></i></td>{% endif %}
+        {% endfor %}
+        {% endwith %}
+        <td class='d-none d-md-block'>{{ res.quantity }}</td>
+        <td><button class='btn btn-danger float-right btn-sm' role='button' data-toggle="modal" data-target="#res{{ res.id }}">Eliminar</button></td>
+        {% endif %}
+      </tr>
+      {% empty %}
+      <p class='alert alert-info mb-0 lead'>Usted no posee reservas actualmente</p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class='row'>
+  {% for res in object_list %}
+  <div class="modal fade" id="res{{ res.id }}" tabindex="-1" role="dialog" aria-labelledby="res{{ res.id }}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="res{{ res.id }}Label">Eliminar Reserva</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {% if res.type == 'D'%}
+          Esta seguro que desea eliminar la reserva del perro <b>{{ res.post.dog.name }}</b>?
+          {% elif res.type == 'P'%}
+          Esta seguro que desea eliminar la reserva del producto <b>{{ res.post.product.name }}</b>?
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <form class="form" action="{% url 'webapp:remove_reservation' res.id %}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Eliminar" class="btn btn-danger">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else%}
+<div class='row m-0'>
+  <div class='col-12 alert alert-danger'>Para ver el contenido de esta pagina debe <a class='btn btn-link pt-1 pl-0' href={% url "webapp:login" %}>iniciar sesion</a></div>
+</div>
+{% endif %}
+{% endblock %}

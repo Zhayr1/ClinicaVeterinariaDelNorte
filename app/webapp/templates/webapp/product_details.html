@@ -1,0 +1,81 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}{{ post.product.name }}{% endblock title %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class='row mt-2'>
+    {% if not user.is_authenticated %}
+    <div class="col-12">
+      <div class="alert alert-dark alert-dismissible" role="alert">
+        <p>Para reservar productos primero debe <a href="{% url 'webapp:login' %}">iniciar sesion</a></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    {% endif %}
+    {% if success and user.is_authenticated %}
+    <div class='col-12'>
+        <div class="alert alert-success mt-0" role="alert">
+            <h4 class="alert-heading">{{ reservation_title }}Reservacion realizada exitosamente</h4>
+            <p>{{ reservation_text }}</p>
+            <hr>
+            <p class="mb-0">{{ reservation_footer }}Esta reservacion sera valida por un plazo de 24 horas.</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class='col-12 col-lg-4'>
+        <div class='row'>
+            <div class='col-12'>
+                <img class='rounded-circle' src="{% static post.product.img_url %}" style='width:300px; height:256px;'>
+            </div>
+        </div>
+        {% load crispy_forms_tags %}
+        <div class='row mt-2 d-none d-lg-block'>
+            <div class='col-12'>
+                <form class="form-group" action="{% url 'webapp:product_details' post.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    {% if post.product.stock > 0 %}
+                    {% if user.is_authenticated %}
+                    <button class='btn btn-primary' role='button' type='submit'><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+                    {% else %}
+                    <button class='btn btn-primary' role='button' type='submit' disabled><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+                    {% endif %}
+                    {% elif post.product.stock < 1 %}
+                    <button class='btn btn-secondary' role='button' type='submit' disabled><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+                    {% endif %}
+                    <a class='btn btn-secondary' href="{% url 'webapp:products' %}">Volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class='col-12 col-lg-8 mt-2'>
+        <p class='lead'><span class='h5'>Nombre: </span>{{ post.product.name }}</p>
+        <p class='lead'><span class='h5'>Precio: </span><span class='text-success'>{{ post.product.price|intcomma }}$</span></p>
+        <p class='lead'><span class='h5'>Cantidad disponible: </span>{{ post.product.stock }}</p>
+        {% if post.product.status == 'Disponible' %}<h5><span class="badge badge-primary">{{ post.product.status }}</span></h5>
+        {% elif post.product.status == 'Reservado' %}<h5><span class="badge badge-warning">{{ post.product.status }}</span></h5>
+        {% endif %}
+        <p class='lead'><span class='h5'>Descripcion: </span>{{ post.product.description }}</p>
+    </div>
+    {% load crispy_forms_tags %}
+    <div class='col-12 mt-2 d-lg-none'>
+        <form class="form-group" action="{% url 'webapp:product_details' post.id %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if post.product.stock > 0 %}
+            {% if user.is_authenticated %}
+            <button class='btn btn-primary' role='button' type='submit'><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+            {% else %}
+            <button class='btn btn-primary' role='button' type='submit' disabled><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+            {% endif %}
+            {% elif post.product.stock < 1 %}
+            <button class='btn btn-secondary' role='button' type='submit' disabled><i class='fa fa-check-circle mr-1'></i>Reservar</button>
+            {% endif %}
+            <a class='btn btn-secondary' href="{% url 'webapp:products' %}">Volver</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

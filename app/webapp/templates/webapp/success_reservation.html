@@ -1,0 +1,14 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+<div class='row'>
+  <div class="col-12 mt-3">
+    <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">{{ reservation_title }}Reservacion realizada exitosamente</h4>
+      <p>{{ reservation_text }}</p>
+      <hr>
+      <p class="mb-0">{{ reservation_footer }}Esta reservacion sera valida por un plazo de 24 horas.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

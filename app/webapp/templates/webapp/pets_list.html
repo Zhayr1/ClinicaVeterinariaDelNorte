@@ -1,0 +1,218 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+{% block title %}{{title}}Mascotas{% endblock %}
+{% block style %}
+  <style>
+    .dog_price_text {
+      color: #28a745;
+    }
+    #test1 {
+      background-color: gray;
+    }
+    #filter_div {
+      color: #f8f9fa;
+    }
+    .status_text {
+      color: #28a745;
+      font-size: 1.25em;
+    }
+  </style>
+{% endblock %}
+{% block nav_items %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:index' %}">Inicio<span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:products' %}">Productos</a>
+  </li>
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'webapp:pets' %}">Mascotas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:contact' %}">Contacto</a>
+  </li>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row mb-2">
+    <div class="col-12 bg-light d-none">
+      <form method="get" action="#">
+        <div class="form-row align-items-end mt-1 mb-1">
+          <div class="col-auto my-1">
+            <div class="row">
+              <div class="col-auto ">
+                <p>Raza</p>
+              </div>
+              <div class="col-auto">
+                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                  <option selected>Todas</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto my-1">
+            <div class="row">
+              <div class="col-auto">
+                <p>Edad</p>
+              </div>
+              <div class="col-auto">
+                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                  <option selected>Todas</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto my-1">
+            <div class="row">
+              <div class="col-auto">
+                <p>Precio</p>
+              </div>
+              <div class="col-auto">
+                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                  <option selected>Todas</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto my-1">
+            <button type="submit" class="btn btn-primary my-1">Filtrar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  <div class="row mt-2">
+    {% if not user.is_authenticated %}
+    <div class="col-12">
+      <div class="alert alert-dark alert-dismissible" role="alert">
+        <p>Para reservar mascotas primero debe <a href="{% url 'webapp:login' %}">iniciar sesion</a></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    {% endif %}
+  {% for dog_post in object_list %}
+    {% if dog_post.type == 'D' %}
+      <div class="col-8 m-auto m-md-0 col-md-6 col-lg-4 mb-2">
+        <div class="card">
+          <img src="{% static dog_post.dog.img_url %}" class="card-img-top" alt="..."height="180px">
+          <div class="card-body">
+            <h5 class="card-title">{{ dog_post.dog.name }}
+              {% if dog_post.dog.status == 'Disponible' %}<span class="badge badge-primary">{{ dog_post.dog.status }}</span>
+              {% elif dog_post.dog.status == 'Reservado' %}<span class="badge badge-warning">{{ dog_post.dog.status }}</span>
+              {% endif %}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-success">{{ dog_post.dog.price }}$</h6>
+            <p class="card-text">Puddle - Macho - 10 años
+              <br><hr></p>
+            <a href="{% url 'webapp:pet_details' dog_post.dog.id %}" class="btn btn-primary btn-md w-100">Ver mas</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% empty %}
+      <div class="col-12">
+        <p> Actualmente no se encuentran perros disponibles en el sistema</p>
+      </div>
+  {% endfor %}
+      <div class="col-12 mt-3">
+        <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+          {% for i in total_objects %}
+          {% if forloop.counter < 6 %}
+          {% if total_objects|length > 5 %}
+          {% if index > 3 and index < total_objects|length|add:'-5' %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter|add:index|add:'-3' %}
+            <a href="{% url 'webapp:pets' forloop.counter|add:index|add:'-3' %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter|add:index|add:'-3'}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:pets' forloop.counter|add:index|add:'-3' %}" class="btn btn-link border-bottom">
+              {{forloop.counter|add:index|add:'-3'}}
+            </a>
+            {% endif %}
+          </div>
+          {% elif index > total_objects|length|add:'-6' and index <= total_objects|length %}
+          {% if forloop.first %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <a href="{% url 'webapp:pets' total_objects|length|add:'-7'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-7'|add:forloop.counter}}
+            </a>
+            </div>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == total_objects|length|add:'-6'|add:forloop.counter %}
+            <a href="{% url 'webapp:pets' total_objects|length|add:'-6'|add:forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{total_objects|length|add:'-6'|add:forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:pets' total_objects|length|add:'-6'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-6'|add:forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == total_objects|length|add:'-5'|add:forloop.counter %}
+            <a href="{% url 'webapp:pets' total_objects|length|add:'-5'|add:forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{total_objects|length|add:'-5'|add:forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:pets' total_objects|length|add:'-5'|add:forloop.counter %}" class="btn btn-link border-bottom">
+              {{total_objects|length|add:'-5'|add:forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter %}
+            <a href="{% url 'webapp:pets' forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:pets' forloop.counter %}" class="btn btn-link border-bottom">
+              {{forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endif %}
+          {% if index < 4 and total_objects|length < 6 %}
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            {% if index == forloop.counter %}
+            <a href="{% url 'webapp:pets' forloop.counter %}" class="btn btn-link border-bottom text-danger">
+              {{forloop.counter}}
+            </a>
+            {% else %}
+            <a href="{% url 'webapp:pets' forloop.counter %}" class="btn btn-link border-bottom">
+              {{forloop.counter}}
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+{% endblock %}

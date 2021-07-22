@@ -1,0 +1,27 @@
+.status_text {
+  font-family: 'Curier', monospace;
+  color: green;
+  font-size: 1.5em;
+}
+.dog_main_text {
+  font-family: 'Curier', monospace;
+  font-size: 2em;
+}
+.dog_text {
+  font-size: 1.1em;
+}
+.dog_information {
+  padding-top: 10px;
+}
+.dog_item_div {
+  margin-right: 30px;
+  margin-bottom: 10px;
+  border: 2px solid orange;
+  border-radius: 10px;
+}
+.dog_img {
+  padding: 10px;
+}
+ul {
+  list-style: none;
+}

@@ -1,0 +1,29 @@
+    {% extends 'webapp/base.html' %}
+    {% block title %}Usuario registrado{% endblock %}
+    {% block styles %}
+    <style type="text/css">
+      .text_div {
+        margin: 15px auto;
+        width: 300px;
+        border: 1px solid orange;
+        border-radius: 20px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+      }
+    </style>
+    {% endblock %}
+    {% block content %}
+    <div class='row'>
+      <div class="col-12 mt-3">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Registro exitoso</h4>
+          <p>Su usario ha sido registrado exitosamente, se le ha enviado un correo de confirmacion para activar su cuenta.
+          <br>El correo de confirmacion sera valido por un plazo de 24 horas</p>
+          <hr>
+          <p class="mb-0">Si no recibe el correo de confirmacion asegurese de haber escrito correctamente su direccion de correo electronico.
+          <br>Puede ir a la pagina de <a href="{% url 'webapp:login' %}">inicio de sesion</a>
+          haciendo click <a href="{% url 'webapp:login' %}">aqui</a></p>
+        </div>
+      </div>
+    </div>
+    {% endblock %}

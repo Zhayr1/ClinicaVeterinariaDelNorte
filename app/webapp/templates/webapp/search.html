@@ -1,0 +1,40 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}Buscar{% endblock title %}
+{% load static %}
+{% block content %}
+<div class='row mt-2'>
+    {% for post in result1 %}
+    <div class="col-auto mb-2 ml-auto mr-auto ml-md-0 mr-md-0">
+        <div class="card" style="width: 15rem;">
+          <img src="{% static post.dog.img_url %}" class="card-img-top" alt="dog image"height="150px">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.dog.name }}
+              {% if post.dog.status == 'Disponible' %}<span class="badge badge-primary">{{ post.dog.status }}</span>
+              {% elif post.dog.status == 'Reservado' %}<span class="badge badge-warning">{{ post.dog.status }}</span>
+              {% endif %}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-success">{{ post.dog.price }}$</h6>
+            <p class="card-text">Puddle - Macho - 10 años
+              <br><hr></p>
+            <a href="{% url 'webapp:pet_details' post.dog.id %}" class="btn btn-primary btn-md w-100">Ver mas</a>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% for post in result2 %}
+    <div class="col-auto mb-2 ml-auto mr-auto ml-md-0 mr-md-0">
+        <div class="card" style="width: 15rem;">
+          <img src="{% static post.product.img_url %}" class="card-img-top" alt="product image"height="150px">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.product.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-success">{{ post.product.price }}$</h6>
+            <p class="card-text">Disponibles: {{ post.product.stock }}
+              <br><hr></p>
+            <a href="{% url 'webapp:product_details' post.id %}" class="btn btn-primary btn-md w-100">Ver mas</a>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

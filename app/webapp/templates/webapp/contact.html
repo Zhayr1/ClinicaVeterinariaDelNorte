@@ -1,0 +1,41 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}Contacto{% endblock %}
+{% block styles %}
+  <style>
+    .contact_div {
+      margin: 10px 10px;
+    }
+  </style>
+{% endblock %}
+{% block nav_items %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:index' %}">Inicio</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:products' %}">Productos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'webapp:pets' %}">Mascotas</a>
+  </li>
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'webapp:contact' %}">Contacto<span class="sr-only">(current)</span></a>
+  </li>
+{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-12 mt-1">
+      <div class="card border-dark mb-3">
+        <div class="card-header">Informacion de Contacto</div>
+        <div class="card-body text-dark">
+          <h5 class=""><i class='fa fa-phone mr-1'></i>Telefonos de contacto: </h5>
+          <p class="card-text ml-1">{{ telf }}</p>
+          <h5 class=""><i class='fa fa-address-book mr-1'></i>Direccion: </h5>
+          <p class="card-text ml-1">{{ direction }}</p>
+          <h5 class=""><i class='fa fa-envelope mr-1'></i>Correos de contacto: </h5>
+          <p class="card-text ml-1">{{ emails }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content='width=device-width, initial-scale=1,shrink-to-fit=no'>
+    <title>{% block title %}Inicio{% endblock %}</title>
+    {% load static %}
+    {% load humanize %}
+    <link href="{% static 'webapp/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'webapp/css/all.css' %}" rel="stylesheet">
+    <style>
+    </style>
+    {% block style %}{% endblock %}
+  </head>
+  <body class="bg-dark">
+    <div class="container bg-light px-1">
+      <div class="container sticky-top bg-light px-0">
+        <div class="row">
+          <div class='col-auto mr-auto'>
+            <h3><p><i class='fa fa-hospital-alt text-dark'></i> Clinica Veterinaria Del Norte</p></h3>
+          </div>
+          <div class="col-auto mt-1">
+              {% if user.is_authenticated %}
+                <div class="row float-right">
+                  <div class="col-auto mt-1">
+                    <h5><p>{{ user.get_full_name|truncatechars:20 }}</p></h5>
+                  </div>
+                  <div class="col-auto pl-0 pr-0">
+                    <a class="btn btn-secondary btn-sm" role='button' href="{% url 'webapp:profile' %}">Mi cuenta <i class="fas fa-cog"></i></a>
+                  </div>
+                  <div class="col-auto pl-1">
+                    <a class="btn btn-secondary btn-sm" role='button' href="{% url 'webapp:logout' %}">Salir <span class='fas fa-sign-out-alt fa-lg'></span></a>
+                  </div>
+                </div>
+                
+              {% else %}
+              <div class="col-auto mb-2">
+                <a class="btn btn-primary btn-sm" role="button" href="{% url 'webapp:login' %}">Ingresar <span class='fas fa-sign-in-alt fa-lg'></span></a>
+                <a class="btn btn-primary btn-sm" role="button" href="{% url 'webapp:signin' %}">Registrarse <span class='fa fa-user-plus fa-lg'></span></a>
+              </div>
+              {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+              <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand m-0" href="{% url 'webapp:index' %}"><i class="fa fa-dog fa-flip-horizontal fa-md"></i> <p class='d-inline d-lg-none'>Menu</p></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    {% block nav_items %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'webapp:index' %}">Inicio<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'webapp:products' %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'webapp:pets' %}">Mascotas</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'webapp:contact' %}">Contacto</a>
+                    </li>
+                    {% endblock %}
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0" method='post' action="{% url 'webapp:search' %}">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" name='search' id='search' type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="buscar">Buscar <i class="fa fa-search"></i></button>
+                  </form>
+                </div>
+              </nav>
+          </div>
+        </div>
+      </div>
+      <div class="container px-0">
+        {% block content %}
+        {% endblock %}
+        <hr>
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <h5 class='lead'><i class='fa fa-copyright'></i> Clinica Veterinaria Del Norte</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'webapp/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'webapp/js/bootstrap.bundle.min.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>

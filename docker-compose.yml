@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    volumes:
+      - static_volume:/usr/src/app/app/static/tmp
+    depends_on:
+      - web
+    restart: "on-failure"
+  pgdb:
+    image: postgres:latest
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    #command: bash -c "cd app && python ./manage.py runserver 0.0.0.0:8000"
+    command: bash -c "cd app && python manage.py migrate && python -m daphne -p 8000 -b 0.0.0.0 backend.asgi:application"
+    volumes:
+      - .:/usr/src/app/
+      - static_volume:/usr/src/app/app/static/tmp
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - pgdb
+    restart: "on-failure"
+
+volumes:
+  postgres_data:
+  static_volume:

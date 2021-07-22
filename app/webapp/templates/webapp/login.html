@@ -1,0 +1,46 @@
+{% extends "webapp/base.html" %}
+
+{% block title%}Ingresar{% endblock %}
+
+{% block styles %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<p> Usted ya ha ingresado al sistema como: {{ user.get_username }}</P>
+{% else %}
+{% if form.errors %}
+<p class='alert alert-danger'>Usuario o contrasenia incorrectos</p>
+{% endif %}
+<hr>
+<div class="row">
+  <div class="col-auto m-auto">
+    <div class="row">
+      <div class="form_div">
+        <div class="col-12">
+          <h3>Iniciar Sesion</h3>
+        </div>
+        <div class="col-12">
+              <form class="form_group" method="post" action=".">
+                {% csrf_token %}
+                <label>Correo: </label>
+                <input class="form-control" type="text" name="username" autofocus autocapitalize="none"
+                  autocomplete="email" maxlength="150" required id="id_username">
+                <label for="id_password">Contraseña:</label>
+                <input class="form-control mb-2" type="password" name="password" autocomplete="current-password"
+                  required id="id_password">
+                <input class="btn btn-primary" type="submit" value="Ingresar">
+                <input type="hidden" name="next" value="{% url 'webapp:index' %}">
+              </form>
+              <p><a href="#">Olvido su contraseña?</a></p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
